@@ -1,12 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sorozatokfulladasig/oldalak/bejelentkezes.dart';
+import 'package:sorozatokfulladasig/oldalak/regisztracio.dart';
 import 'package:dio/dio.dart';
+import 'package:carousel_slider/carousel_slider.dart'; //Kezdőlap mozgó képek
 
 void main() {
   runApp(MaterialApp(
       title: 'Drawer App',
-      home: HomeScreen(),
-
+      initialRoute: '/home',
+      routes: {
+        //nemjó '/': (context) => Loading(),
+        '/home': (context) => HomeScreen(),
+      },
   ));
 }
 
@@ -19,6 +25,68 @@ class HomeScreen extends StatelessWidget {
        title: Text('Sorozatok Fulladásig'),
        backgroundColor: Colors.red[800],
      ),
+
+      body:
+      Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0.0 , 10.0, 0, 0,),
+            child: Text('Kiemelt sorozatok', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0, color: Colors.black ),),
+          ),
+          Padding( //Mozgó képek
+            padding: const EdgeInsets.fromLTRB(0.0 , 10.0, 0, 0,),
+            child: CarouselSlider(
+              height: 200.0,
+              items: [1,2,3,4,5].map((i) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(
+                            color: Colors.amber
+                        ),
+                        child: Text('text $i', style: TextStyle(fontSize: 16.0),)
+
+                    );
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0.0 , 10.0, 0, 0,),
+            child: Text('Frissen megosztott sorozatok', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0, color: Colors.black ),),
+          ),
+          Padding( //Mozgó képek
+            padding: const EdgeInsets.fromLTRB(0.0 , 10.0, 0, 0,),
+            child: CarouselSlider(
+              height: 200.0,
+              items: [1,2,3,4,5].map((i) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(
+                            color: Colors.amber
+                        ),
+                        child: Text('text $i', style: TextStyle(fontSize: 16.0),)
+
+                    );
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+
+        ],
+      ),
+
+
+
+
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
@@ -43,9 +111,13 @@ class HomeScreen extends StatelessWidget {
                     ],
                   )
                 )),
-            CustomListTile(Icons.person, 'Profil', ()=>{}),
+            CustomListTile(Icons.person, 'Profil', () {  //Kattintásra át megy a bejelentkezésre!
+            Navigator.push(context,
+            MaterialPageRoute(builder: (context) => bejelentkezes()),
+            );
+            }),
             CustomListTile(Icons.settings, 'Beállítások', ()=>{}),
-            CustomListTile(Icons.notifications, 'Értesítések', ()=>{}),
+            CustomListTile(Icons.notifications, 'Sorozat Kategóriák', ()=>{}),
             CustomListTile(Icons.lock, 'Kijelentkezés', ()=>{}),
   ],
         ),
@@ -53,7 +125,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
 class CustomListTile extends StatelessWidget {
 
   IconData icon;
@@ -69,7 +140,7 @@ class CustomListTile extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey.shade400))
+            border: Border(bottom: BorderSide(color: Colors.grey.shade400))
         ),
         child: InkWell(
           onTap: onTap,
@@ -80,15 +151,15 @@ class CustomListTile extends StatelessWidget {
               Container(
                 height: 50,
                 child: Row(
-                  children: <Widget>  [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(icon),
-                  ),
-                  Text(text, style: TextStyle(
-                      fontSize: 18.0
-                  ),),
-        ],
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(icon),
+                    ),
+                    Text(text, style: TextStyle(
+                        fontSize: 18.0
+                    ),),
+                  ],
                 ),
               ),
 
@@ -99,6 +170,4 @@ class CustomListTile extends StatelessWidget {
       ),
     );
   }
-}
-
-
+  }
